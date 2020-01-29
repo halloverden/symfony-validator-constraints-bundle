@@ -4,41 +4,11 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class AssertIfValidator extends ConstraintValidator {
-  /**
-   * @var LoggerInterface
-   */
-  private $logger;
-
-  /**
-   * @var TranslatorInterface
-   */
-  private $translator;
-
-  /**
-   * @var ValidatorInterface
-   */
-  private $validator;
-
-  /**
-   * AssertIfValidator constructor.
-   * @param LoggerInterface $logger
-   * @param TranslatorInterface $translator
-   * @param ValidatorInterface $validator
-   */
-  public function __construct(LoggerInterface $logger, TranslatorInterface $translator, ValidatorInterface $validator) {
-    $this->logger = $logger;
-    $this->translator = $translator;
-    $this->validator = $validator;
-  }
 
   /**
    * @param mixed $value
@@ -59,9 +29,7 @@ class AssertIfValidator extends ConstraintValidator {
       $c = $context;
       $v = $context->getValidator()->inContext($c)->validate($value, $constraint->test, $context->getGroup());
     } else {
-      $c = new ExecutionContext($this->validator, $context->getRoot(), $this->translator);
-      $c->setNode($value, $context->getObject(), $context->getMetadata(), $context->getPropertyPath());
-      $v = $context->getValidator()->inContext($c)->validate($value, $constraint->test, $context->getGroup());
+      $v = $context->getValidator()->startContext()->validate($value, $constraint->test, $context->getGroup());
     }
 
     if (0 === count($v->getViolations())) {
