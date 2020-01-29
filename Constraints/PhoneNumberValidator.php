@@ -19,16 +19,27 @@ class PhoneNumberValidator extends ConstraintValidator {
   private $phoneNumberUtil;
 
   /**
+   * @var string
+   */
+  private $defaultRegion;
+
+  /**
    * PhoneNumberValidator constructor.
    *
+   * @param string          $defaultRegion
    * @param PhoneNumberUtil $phoneNumberUtil
    */
-  public function __construct(PhoneNumberUtil $phoneNumberUtil) {
+  public function __construct(string $defaultRegion = 'NO', ?PhoneNumberUtil $phoneNumberUtil = null) {
     if (!class_exists(PhoneNumberUtil::class)) {
       throw new \LogicException(sprintf('The "%s" class requires the "libphonenumber" component. Try running "composer require giggsey/libphonenumber-for-php".', self::class));
     }
 
+    if (!$phoneNumberUtil) {
+      $phoneNumberUtil = PhoneNumberUtil::getInstance();
+    }
+
     $this->phoneNumberUtil = $phoneNumberUtil;
+    $this->defaultRegion = $defaultRegion;
   }
 
 
@@ -70,7 +81,7 @@ class PhoneNumberValidator extends ConstraintValidator {
   private function isValidPhoneNumber($value, PhoneNumber $constraint): bool {
     if (!$value instanceof \libphonenumber\PhoneNumber) {
       try {
-        $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion);
+        $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion ?: $this->defaultRegion);
       } catch (NumberParseException $e) {
         return false;
       }
@@ -91,7 +102,7 @@ class PhoneNumberValidator extends ConstraintValidator {
     if(!empty($constraint->validTypes)) {
       if (!$value instanceof \libphonenumber\PhoneNumber) {
         try {
-          $phoneNumber = PhoneNumberHelper::getPhoneNumber((string)$value, true, $constraint->defaultRegion);
+          $phoneNumber = PhoneNumberHelper::getPhoneNumber((string)$value, true, $constraint->defaultRegion ?: $this->defaultRegion);
         } catch (NumberParseException $e) {
           return false;
         }
@@ -113,12 +124,12 @@ class PhoneNumberValidator extends ConstraintValidator {
    */
   private function getInvalidityReason(string $value, PhoneNumber $constraint) {
     try {
-      $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion);
+      $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion ?: $this->defaultRegion);
     } catch (NumberParseException $e) {
       return 'invalid';
     }
 
-    if(!$this->phoneNumberUtil->isPossibleNumber($value, $constraint->defaultRegion)) {
+    if(!$this->phoneNumberUtil->isPossibleNumber($value, $constraint->defaultRegion ?: $this->defaultRegion)) {
       return PhoneNumber::PHONE_NUMBER_VALIDATION_RESULT_TO_REASON[$this->phoneNumberUtil->isPossibleNumberWithReason($phoneNumber)];
     } else {
       //if the number is possible check if invalidity is because of type

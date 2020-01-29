@@ -10,7 +10,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class PhoneValidator extends ConstraintValidator {
@@ -18,13 +17,19 @@ class PhoneValidator extends ConstraintValidator {
   const PHONE_NUMBER_GROUP = 'phone_number';
 
   /**
-   * @var ValidatorInterface
+   * @var string
    */
-  private $validator;
+  private $defaultRegion;
 
-  public function __construct(ValidatorInterface $validator) {
-    $this->validator = $validator;
+  /**
+   * PhoneValidator constructor.
+   *
+   * @param string $defaultRegion
+   */
+  public function __construct(string $defaultRegion = 'NO') {
+    $this->defaultRegion = $defaultRegion;
   }
+
 
   /**
    * @param mixed $value
@@ -35,16 +40,16 @@ class PhoneValidator extends ConstraintValidator {
       throw new UnexpectedTypeException($constraint, Phone::class);
     }
     $value = (string)$value;
-    $violations = $this->validator->validate($value, self::getConstraints(), self::getGroupSequence());
+    $violations = $this->context->getValidator()->validate($value, $this->getConstraints(), self::getGroupSequence());
     if ($violations->count() > 0) {
       self::addViolations($violations);
     }
   }
 
-  private static function getConstraints() {
+  private function getConstraints() {
     return [
       new NotBlank(['groups' => self::NOT_BLANK_GROUP]),
-      new PhoneNumber(['defaultRegion' => \App\Entity\User\Phone::DEFAULT_REGION, 'groups' => self::PHONE_NUMBER_GROUP]),
+      new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'groups' => self::PHONE_NUMBER_GROUP]),
     ];
   }
 
