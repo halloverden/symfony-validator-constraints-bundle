@@ -10,22 +10,12 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class EmailValidator extends ConstraintValidator {
   const NOT_BLANK_GROUP = 'not_blank';
   const EMAIL_GROUP = 'email';
   const KICKBOX_GROUP = 'kickbox';
-
-  /**
-   * @var ValidatorInterface
-   */
-  private $validator;
-
-  public function __construct(ValidatorInterface $validator) {
-    $this->validator = $validator;
-  }
 
   /**
    * @param mixed $value
@@ -36,7 +26,7 @@ class EmailValidator extends ConstraintValidator {
       throw new UnexpectedTypeException($constraint, Email::class);
     }
     $value = (string)$value;
-    $violations = $this->validator->validate($value, self::getConstraints(), self::getGroupSequence());
+    $violations = $this->context->getValidator()->validate($value, self::getConstraints(), self::getGroupSequence());
     if ($violations->count() > 0) {
       self::addViolations($violations);
     }
