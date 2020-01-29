@@ -14,6 +14,15 @@ use League\Uri\Uri as LeagueUri;
 class UriValidator extends ConstraintValidator {
 
   /**
+   * UriValidator constructor.
+   */
+  public function __construct() {
+    if (!class_exists(LeagueUri::class)) {
+      throw new \LogicException(sprintf('The "%s" class requires the "League/uri" component. Try running "composer require league/uri".', self::class));
+    }
+  }
+
+  /**
    * Checks if the passed value is valid.
    *
    * @param mixed      $value The value that should be validated
