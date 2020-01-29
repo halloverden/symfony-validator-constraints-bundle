@@ -1,0 +1,5 @@
+hallo_verden_validator_constraints:
+  kickbox:
+    api_key: 'abc'
+  phone:
+    default_region: 'NO'
