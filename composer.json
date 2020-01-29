@@ -29,6 +29,7 @@
     "require-dev": {
         "jms/serializer": "^3.4",
         "kickbox/kickbox": "^2.2",
-        "giggsey/libphonenumber-for-php": "^8.11"
+        "giggsey/libphonenumber-for-php": "^8.11",
+        "doctrine/doctrine-bundle": "^2.0"
     }
 }
