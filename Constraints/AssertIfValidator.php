@@ -6,9 +6,35 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorTrait;
 
 class AssertIfValidator extends ConstraintValidator {
+
+  /**
+   * @var TranslatorInterface
+   */
+  private $translator;
+
+  /**
+   * AssertIfValidator constructor.
+   *
+   * @param TranslatorInterface $translator
+   */
+  public function __construct(?TranslatorInterface $translator = null) {
+    if (null === $translator) {
+      $translator = new class() implements TranslatorInterface, LocaleAwareInterface {
+        use TranslatorTrait;
+      };
+      $translator->setLocale('en');
+    }
+
+    $this->translator = $translator;
+  }
+
 
   /**
    * @param mixed $value
@@ -29,7 +55,9 @@ class AssertIfValidator extends ConstraintValidator {
       $c = $context;
       $v = $context->getValidator()->inContext($c)->validate($value, $constraint->test, $context->getGroup());
     } else {
-      $v = $context->getValidator()->startContext()->validate($value, $constraint->test, $context->getGroup());
+      $c = new ExecutionContext($context->getValidator(), $context->getRoot(), $this->translator);
+      $c->setNode($value, $context->getObject(), $context->getMetadata(), $context->getPropertyPath());
+      $v = $context->getValidator()->inContext($c)->validate($value, $constraint->test, $context->getGroup());
     }
 
     if (0 === count($v->getViolations())) {
