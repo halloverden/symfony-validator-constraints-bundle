@@ -9,6 +9,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\ManagerRegistry;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\ArrayClassValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\AssertIfValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
@@ -18,6 +19,7 @@ use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoService;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
@@ -68,6 +70,10 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
         $this->registerValidator($container, PropertyClassValidator::class, $arguments);
       }
     }
+
+    $this->registerValidator($container, AssertIfValidator::class, [
+      '$translator' => new Reference('translator', ContainerInterface::NULL_ON_INVALID_REFERENCE)
+    ]);
 
     if (isset($config['kickbox']['api_key'])) {
       $this->registerValidator($container, KickboxValidator::class, [
