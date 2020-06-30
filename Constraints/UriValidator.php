@@ -4,7 +4,7 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
-use League\Uri\Contracts\UriException;
+use League\Uri\Exceptions\SyntaxError;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -44,11 +44,20 @@ class UriValidator extends ConstraintValidator {
     $value = (string) $value;
 
     try {
-      LeagueUri::createFromString($value);
-    } catch (UriException $exception) {
+      $uri = LeagueUri::createFromString($value);
+    } catch (SyntaxError $exception) {
       $this->context->buildViolation($constraint->message)
         ->setParameter('{{ value }}', $this->formatValue($value))
         ->setCode(Uri::ERROR_INVALID_URI)
+        ->addViolation();
+
+      return;
+    }
+
+    if ($constraint->requireScheme && !$uri['scheme']) {
+      $this->context->buildViolation($constraint->messageMissingScheme)
+        ->setParameter('{{ value }}', $this->formatValue($value))
+        ->setCode(Uri::ERROR_URI_MISSING_SCHEME)
         ->addViolation();
     }
   }

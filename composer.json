@@ -7,10 +7,17 @@
         {
             "name": "Tom Roar Furunes",
             "email": "tom.roar@halloverden.no"
+        },
+        {
+            "name": "Erich Json Fosse",
+            "email": "erich@halloverden.no"
         }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "^7.2",
         "symfony/http-kernel": "^4.4.7|^5.0.7",
@@ -27,9 +34,10 @@
         }
     },
     "require-dev": {
+        "doctrine/doctrine-bundle": "^2.0",
+        "giggsey/libphonenumber-for-php": "^8.11",
         "jms/serializer": "^3.4",
         "kickbox/kickbox": "^2.2",
-        "giggsey/libphonenumber-for-php": "^8.11",
-        "doctrine/doctrine-bundle": "^2.0"
+        "league/uri": "^6.2"
     }
 }
