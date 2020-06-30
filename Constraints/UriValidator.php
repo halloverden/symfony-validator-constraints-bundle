@@ -54,7 +54,7 @@ class UriValidator extends ConstraintValidator {
       return;
     }
 
-    if ($constraint->requireScheme && !$uri['scheme']) {
+    if ($constraint->requireScheme && !$uri->getScheme()) {
       $this->context->buildViolation($constraint->messageMissingScheme)
         ->setParameter('{{ value }}', $this->formatValue($value))
         ->setCode(Uri::ERROR_URI_MISSING_SCHEME)
