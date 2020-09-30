@@ -10,6 +10,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\ManagerRegistry;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\ArrayClassValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\AssertIfValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\IdenticalToValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
@@ -68,6 +69,10 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
         ];
         $this->registerValidator($container, ArrayClassValidator::class, $arguments);
         $this->registerValidator($container, PropertyClassValidator::class, $arguments);
+
+        $this->registerValidator($container, IdenticalToValidator::class, [
+          '$propertyAccessor' => $propertyAccessor
+        ]);
       }
     }
 
