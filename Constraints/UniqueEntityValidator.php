@@ -8,6 +8,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -21,9 +23,20 @@ use Traversable;
 class UniqueEntityValidator extends ConstraintValidator {
   private $registry;
 
-  public function __construct(ManagerRegistry $registry) {
+  /**
+   * @var PropertyAccessorInterface|null
+   */
+  private $propertyAccessor;
 
+  /**
+   * UniqueEntityValidator constructor.
+   *
+   * @param ManagerRegistry                $registry
+   * @param PropertyAccessorInterface|null $propertyAccessor
+   */
+  public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor = null) {
     $this->registry = $registry;
+    $this->propertyAccessor = $propertyAccessor;
   }
 
   /**
@@ -129,7 +142,7 @@ class UniqueEntityValidator extends ConstraintValidator {
 
     foreach ($fields as $fieldName) {
       if (is_array($value)) {
-        $fieldValue = isset($value[$fieldName]) ? $value[$fieldName] : null;
+        $fieldValue = isset($value[$fieldName]) ? $value[$fieldName] : $this->getValueFromPropertyPath($value, $fieldName);
       } else {
         if (!$class->hasField($fieldName) && !$class->hasAssociation($fieldName)) {
           throw new ConstraintDefinitionException(sprintf('The field "%s" is not mapped by Doctrine, so it cannot be validated for uniqueness.', $fieldName));
@@ -330,4 +343,36 @@ class UniqueEntityValidator extends ConstraintValidator {
 
     return sprintf('object("%s") identified by (%s)', $idClass, implode(', ', $identifiers));
   }
+
+  /**
+   * @param array  $data
+   * @param string $propertyPath
+   *
+   * @return mixed|null
+   */
+  private function getValueFromPropertyPath(array $data, string $propertyPath) {
+    $propertyAccessor = $this->getPropertyAccessor();
+
+    if (!$propertyAccessor) {
+      return null;
+    }
+
+    if ($propertyAccessor->isReadable($data, $propertyPath)) {
+      return $propertyAccessor->getValue($data, $propertyPath);
+    }
+
+    return null;
+  }
+
+  /**
+   * @return PropertyAccessorInterface|null
+   */
+  private function getPropertyAccessor(): ?PropertyAccessorInterface {
+    if (!$this->propertyAccessor && class_exists(PropertyAccess::class)) {
+      return $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+    }
+
+    return $this->propertyAccessor;
+  }
+
 }
