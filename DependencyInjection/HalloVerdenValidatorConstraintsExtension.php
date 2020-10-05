@@ -37,11 +37,6 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
     $config = $this->processConfiguration($configuration, $configs);
 
     $bundles = $container->getParameter('kernel.bundles');
-    if (isset($bundles['DoctrineBundle']) && interface_exists(ManagerRegistry::class)) {
-      $this->registerValidator($container, UniqueEntityValidator::class, [
-        '$registry' => new Reference(ManagerRegistry::class)
-      ]);
-    }
 
     if (class_exists(Annotation::class)) {
       if (isset($bundles['FrameworkBundle'])) {
@@ -56,6 +51,7 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
       $classInfoService->setClass(ClassInfoService::class);
       $container->setDefinition(ClassInfoServiceInterface::class, $classInfoService);
 
+      $propertyAccessor = null;
       if (class_exists(PropertyAccessor::class)) {
         if (isset($bundles['FrameworkBundle'])) {
           $propertyAccessor = new Reference(PropertyAccessorInterface::class);
@@ -71,6 +67,13 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
         $this->registerValidator($container, PropertyClassValidator::class, $arguments);
 
         $this->registerValidator($container, IdenticalToValidator::class, [
+          '$propertyAccessor' => $propertyAccessor
+        ]);
+      }
+
+      if (isset($bundles['DoctrineBundle']) && interface_exists(ManagerRegistry::class)) {
+        $this->registerValidator($container, UniqueEntityValidator::class, [
+          '$registry' => new Reference(ManagerRegistry::class),
           '$propertyAccessor' => $propertyAccessor
         ]);
       }
