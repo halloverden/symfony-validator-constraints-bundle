@@ -154,7 +154,7 @@ class UniqueEntityValidator extends ConstraintValidator {
             return null;
           }
 
-          $value = $this->getValueFromPropertyPath($value, $propertyPath);
+          $fieldValue = $this->getValueFromPropertyPath($value, $propertyPath);
 
           // If we got value from property path the fieldName is the last element in the path.
           $elements = $propertyPath->getElements();
