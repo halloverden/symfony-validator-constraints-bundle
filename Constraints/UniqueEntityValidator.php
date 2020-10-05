@@ -304,8 +304,8 @@ class UniqueEntityValidator extends ConstraintValidator {
    * @param $value
    */
   private function buildViolation(UniqueEntity $constraint, array $fields, array $criteria, ObjectManager $em, ClassMetadata $class, $result, $value) {
-    $errorPath = null !== $constraint->errorPath ? $constraint->errorPath : is_array($value) ? '[' . $fields[0] . ']' : $fields[0];
-    $invalidValue = isset($criteria[$errorPath]) ? $criteria[$errorPath] : $criteria[$fields[0]];
+    $errorPath = null !== $constraint->errorPath ? $constraint->errorPath : (is_array($value) ? '[' . $fields[0] . ']' : $fields[0]);
+    $invalidValue = isset($criteria[$errorPath]) ? $criteria[$errorPath] : ($criteria[$fields[0]] ?? end($criteria));
 
     $this->context->buildViolation($constraint->message)
       ->atPath($errorPath)
