@@ -8,8 +8,11 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
+use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
+use Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
@@ -142,7 +145,21 @@ class UniqueEntityValidator extends ConstraintValidator {
 
     foreach ($fields as $fieldName) {
       if (is_array($value)) {
-        $fieldValue = isset($value[$fieldName]) ? $value[$fieldName] : $this->getValueFromPropertyPath($value, $fieldName);
+        if (isset($value[$fieldName])) {
+          $fieldValue = $value[$fieldName];
+        } else {
+          try {
+            $propertyPath = new PropertyPath($fieldName);
+          } catch (InvalidArgumentException | InvalidPropertyPathException $e) {
+            return null;
+          }
+
+          $value = $this->getValueFromPropertyPath($value, $propertyPath);
+
+          // If we got value from property path the fieldName is the last element in the path.
+          $elements = $propertyPath->getElements();
+          $fieldName = end($elements);
+        }
       } else {
         if (!$class->hasField($fieldName) && !$class->hasAssociation($fieldName)) {
           throw new ConstraintDefinitionException(sprintf('The field "%s" is not mapped by Doctrine, so it cannot be validated for uniqueness.', $fieldName));
