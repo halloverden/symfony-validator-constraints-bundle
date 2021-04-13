@@ -5,7 +5,7 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
 /**
- * Class BaseCustomPhoneNumberValidator
+ * Class FixedLineOrMobilePhoneNumberValidator
  * @package HalloVerden\ValidatorConstraintsBundle\Constraints
  */
 class FixedLineOrMobilePhoneNumberValidator extends BaseCustomPhoneNumberValidator {

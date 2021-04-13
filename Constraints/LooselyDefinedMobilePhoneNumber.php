@@ -6,6 +6,11 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 use libphonenumber\PhoneNumberType;
 
 /**
+ * Class LooselyDefinedMobilePhoneNumber
+ * This Constraint is used to validate mobile numbers or numbers where it's impossible to determine if they are fixed line or mobile
+ *
+ * @package HalloVerden\ValidatorConstraintsBundle\Constraints
+ *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */

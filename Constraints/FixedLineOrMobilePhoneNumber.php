@@ -6,6 +6,11 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 use libphonenumber\PhoneNumberType;
 
 /**
+ * Class FixedLineOrMobilePhoneNumber
+ * This Constraint is used to validate fixed line or mobile phone numbers
+ *
+ * @package HalloVerden\ValidatorConstraintsBundle\Constraints
+ *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
