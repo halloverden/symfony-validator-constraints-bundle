@@ -77,7 +77,7 @@ class PhoneNumber extends Constraint {
       throw new \LogicException(sprintf('The "%s" class requires the "libphonenumber" component. Try running "composer require giggsey/libphonenumber-for-php".', self::class));
     }
 
-    $this->validTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];;
+    $options['validTypes'] = $this->validTypes = $options['validTypes'] ?? [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
 
     parent::__construct($options);
   }

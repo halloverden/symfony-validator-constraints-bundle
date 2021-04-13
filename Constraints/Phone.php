@@ -19,4 +19,15 @@ class Phone extends Constraint {
   ];
 
   public $message = 'phoneNumber.invalid';
+
+  /**
+   * @var array|null
+   */
+  public $validTypes;
+
+  public function __construct($options = null) {
+    $this->validTypes = $options['validTypes'] ?? null;
+    parent::__construct($options);
+  }
+
 }
