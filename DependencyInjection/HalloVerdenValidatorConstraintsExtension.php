@@ -15,7 +15,6 @@ use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PropertyClassValidator;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\UniqueEntityPropertyValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\UniqueEntityValidator;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoService;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoServiceInterface;
