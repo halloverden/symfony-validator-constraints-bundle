@@ -4,11 +4,9 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
-use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\ObjectManager;
-use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
@@ -29,69 +27,38 @@ class UniqueEntityPropertyValidator extends BaseUniqueEntityConstraintValidator 
     if (!$constraint instanceof UniqueEntityProperty) {
       throw new UnexpectedTypeException($constraint, UniqueEntityProperty::class);
     }
+    //sets the UniqueEntityProperty as first element in the fields array
+    array_unshift($constraint->fields[], $this->context->getPropertyName());
 
-    $propertyName = $this->context->getPropertyName();
-    $className = $this->context->getClassName();
-    // By default, the property subject of the UniqueEntityProperty Constraint is one of the fields we need to check
-    $constraint->fields[] = $propertyName;
-
-    $em = $this->registry->getManagerForClass($className);
-    $classMetadata = $em->getClassMetadata($className);
-
-    /* @var $class ClassMetadata */
-    if (!$criteria = $this->getCriteria($constraint->fields, $classMetadata, $this->context->getObject(), $constraint, $em)) {
-      return;
+    //validate entity with the UniqueEntity Validator
+    $violations = $this->context->getValidator()->validate($this->context->getObject(), $this->getConstraints($constraint->fields));
+    if ($violations->count() > 0) {
+      self::addViolations($violations);
     }
-    $repository = $this->getRepository($em, $classMetadata);
-
-    if (!$fetchedEntity = $this->fetchEntity($repository, $constraint, $criteria, $value)) {
-      return;
-    }
-
-    $this->buildViolation($constraint, $propertyName, $value, $fetchedEntity);
   }
 
   /**
-   * @param ObjectManager $em
-   * @param ClassMetadata $classMetadata
-   *
-   * @return ObjectRepository
-   * @throws \ReflectionException
+   * @param $fields
+   * @return UniqueEntity[]
    */
-  private function getRepository(ObjectManager $em, ClassMetadata $classMetadata): ObjectRepository {
-    if (null !== $classMetadata->getName()) {
-      /* Retrieve repository from given entity name.
-       * We ensure the retrieved repository can handle the entity
-       * by checking the class is the same, or subclass of the supported entity.
-       */
-      $repository = $em->getRepository($classMetadata->getName());
-      $supportedClass = $repository->getClassName();
-
-      $entity = $classMetadata->getReflectionClass();
-
-      if (!$entity->newInstanceWithoutConstructor() instanceof $supportedClass) {
-        throw new ConstraintDefinitionException(sprintf('The "%s" entity repository does not support the "%s" entity. The entity should be an instance of or extend "%s".', $classMetadata->getName(), $classMetadata->getName(), $supportedClass));
-      }
-    } else {
-      $repository = $em->getRepository($classMetadata->getName());
-    }
-
-    return $repository;
+  private function getConstraints($fields): array {
+    return [
+      new UniqueEntity(['fields' => $fields])
+    ];
   }
 
   /**
-   * @param UniqueEntityProperty $constraint
-   * @param string $propertyName
-   * @param $value
-   * @param $fetchedEntity
+   * @param ConstraintViolationListInterface $violations
    */
-  private function buildViolation(UniqueEntityProperty $constraint, string $propertyName, $value, $fetchedEntity) {
-    $this->context->buildViolation($constraint->message)
-      ->setParameter('{{ value }}', $propertyName)
-      ->setInvalidValue($value)
-      ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
-      ->setCause($fetchedEntity)
-      ->addViolation();
+  private function addViolations(ConstraintViolationListInterface $violations) {
+    /** @var ConstraintViolation $violation */
+    foreach ($violations as $violation){
+      $this->context->setConstraint($violation->getConstraint());
+      $this->context->buildViolation($violation->getMessage())
+        ->setCode($violation->getCode())
+        ->setCause($violation->getCause())
+        ->setInvalidValue($violation->getInvalidValue())
+        ->addViolation();
+    }
   }
-
 }
