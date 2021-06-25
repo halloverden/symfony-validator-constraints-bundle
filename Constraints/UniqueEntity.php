@@ -18,4 +18,11 @@ class UniqueEntity extends BaseUniqueEntityConstraint {
     return ['fields'];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getTargets() {
+    return self::CLASS_CONSTRAINT;
+  }
+
 }

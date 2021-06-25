@@ -26,13 +26,6 @@ abstract class BaseUniqueEntityConstraint extends Constraint implements ArrayCla
     return 'fields';
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getTargets() {
-    return self::CLASS_CONSTRAINT;
-  }
-
   public function setClassName(string $class): void {
     $this->entityClass = $class;
   }
