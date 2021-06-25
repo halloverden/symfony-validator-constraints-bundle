@@ -44,15 +44,7 @@ class UniqueEntityPropertyValidator extends ConstraintValidator {
    */
   private function getConstraints(UniqueEntityProperty $constraint): array {
     return [
-      new UniqueEntity([
-        'message'          => $constraint->message,
-        'fields'           => $constraint->fields,
-        'em'               => $constraint->em,
-        'entityClass'      => $constraint->entityClass,
-        'errorPath'        => $constraint->errorPath,
-        'ignoreNull'       => $constraint->ignoreNull,
-        'repositoryMethod' => $constraint->repositoryMethod,
-      ])
+      new UniqueEntity($constraint->toArray())
     ];
   }
 

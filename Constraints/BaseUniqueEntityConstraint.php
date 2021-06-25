@@ -26,8 +26,26 @@ abstract class BaseUniqueEntityConstraint extends Constraint implements ArrayCla
     return 'fields';
   }
 
+  /**
+   * @param string $class
+   */
   public function setClassName(string $class): void {
     $this->entityClass = $class;
+  }
+
+  /**
+   * @return array
+   */
+  public function toArray(): array {
+    return [
+      'message'          => $this->message,
+      'em'               => $this->em,
+      'entityClass'      => $this->entityClass,
+      'errorPath'        => $this->errorPath,
+      'fields'           => $this->fields,
+      'ignoreNull'       => $this->ignoreNull,
+      'repositoryMethod' => $this->repositoryMethod
+    ];
   }
 
 }
