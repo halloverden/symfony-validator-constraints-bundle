@@ -4,11 +4,9 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -18,17 +16,6 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * @package HalloVerden\ValidatorConstraintsBundle\Constraints
  */
 class UniqueEntityValidator extends BaseUniqueEntityConstraintValidator {
-
-  /**
-   * UniqueEntityValidator constructor
-   *
-   * @param ManagerRegistry $registry
-   * @param PropertyAccessorInterface|null $propertyAccessor
-   */
-  public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor = null) {
-    $this->registry = $registry;
-    $this->propertyAccessor = $propertyAccessor;
-  }
 
   /**
    * Checks if the passed value is valid.

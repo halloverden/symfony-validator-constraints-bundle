@@ -10,12 +10,12 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\ManagerRegistry;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\ArrayClassValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\AssertIfValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\BaseUniqueEntityConstraintValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\IdenticalToValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PropertyClassValidator;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\UniqueEntityValidator;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoService;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoServiceInterface;
 use Psr\Log\LoggerInterface;
@@ -72,7 +72,7 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
       }
 
       if (isset($bundles['DoctrineBundle']) && interface_exists(ManagerRegistry::class)) {
-        $this->registerValidator($container, UniqueEntityValidator::class, [
+        $this->registerValidator($container, BaseUniqueEntityConstraintValidator::class, [
           '$registry' => new Reference(ManagerRegistry::class),
           '$propertyAccessor' => $propertyAccessor
         ]);
