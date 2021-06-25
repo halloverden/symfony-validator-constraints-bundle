@@ -34,17 +34,6 @@ abstract class BaseUniqueEntityConstraintValidator extends ConstraintValidator {
   protected $propertyAccessor;
 
   /**
-   * BaseUniqueEntityConstraintValidator constructor
-   *
-   * @param ManagerRegistry $registry
-   * @param PropertyAccessorInterface|null $propertyAccessor
-   */
-  public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor = null) {
-    $this->registry = $registry;
-    $this->propertyAccessor = $propertyAccessor;
-  }
-
-  /**
    * @param array $fields
    * @param ClassMetadata $class
    * @param $value
