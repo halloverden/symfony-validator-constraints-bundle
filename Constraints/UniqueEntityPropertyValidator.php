@@ -5,6 +5,7 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  * Class UniqueEntityPropertyValidator
  * @package HalloVerden\ValidatorConstraintsBundle\Constraints
  */
-class UniqueEntityPropertyValidator extends BaseUniqueEntityConstraintValidator {
+class UniqueEntityPropertyValidator extends ConstraintValidator {
 
   /**
    * Checks if the passed value is valid.
@@ -31,19 +32,26 @@ class UniqueEntityPropertyValidator extends BaseUniqueEntityConstraintValidator 
     array_unshift($constraint->fields[], $this->context->getPropertyName());
 
     //validate entity with the UniqueEntity Validator
-    $violations = $this->context->getValidator()->validate($this->context->getObject(), $this->getConstraints($constraint->fields));
+    $violations = $this->context->getValidator()->validate($this->context->getObject(), $this->getConstraints($constraint));
     if ($violations->count() > 0) {
       self::addViolations($violations);
     }
   }
 
   /**
-   * @param $fields
+   * @param UniqueEntityProperty $constraint
    * @return UniqueEntity[]
    */
-  private function getConstraints($fields): array {
+  private function getConstraints(UniqueEntityProperty $constraint): array {
     return [
-      new UniqueEntity(['fields' => $fields])
+      new UniqueEntity([
+        'fields'           => $constraint->fields,
+        'em'               => $constraint->em,
+        'entityClass'      => $constraint->entityClass,
+        'errorPath'        => $constraint->errorPath,
+        'ignoreNull'       => $constraint->ignoreNull,
+        'repositoryMethod' => $constraint->repositoryMethod,
+      ])
     ];
   }
 
