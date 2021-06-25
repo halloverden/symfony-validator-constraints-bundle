@@ -29,7 +29,7 @@ class UniqueEntityPropertyValidator extends ConstraintValidator {
       throw new UnexpectedTypeException($constraint, UniqueEntityProperty::class);
     }
     //sets the UniqueEntityProperty as first element in the fields array
-    array_unshift($constraint->fields[], $this->context->getPropertyName());
+    array_unshift($constraint->fields, $this->context->getPropertyName());
 
     //validate entity with the UniqueEntity Validator
     $violations = $this->context->getValidator()->validate($this->context->getObject(), $this->getConstraints($constraint));
