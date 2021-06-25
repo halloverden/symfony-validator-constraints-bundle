@@ -78,13 +78,6 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
           '$propertyAccessor' => $propertyAccessor
         ]);
       }
-
-      if (isset($bundles['DoctrineBundle']) && interface_exists(ManagerRegistry::class)) {
-        $this->registerValidator($container, UniqueEntityPropertyValidator::class, [
-          '$registry' => new Reference(ManagerRegistry::class),
-          '$propertyAccessor' => $propertyAccessor
-        ]);
-      }
     }
 
     $this->registerValidator($container, AssertIfValidator::class, [
