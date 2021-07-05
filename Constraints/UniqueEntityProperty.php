@@ -5,10 +5,12 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
 /**
- * Class UniqueProperty
- * @package App\Validator\Constraints
+ * Class UniqueEntityProperty
  *
  * @Annotation
+ * @Target({"PROPERTY"})
+ *
+ * @package App\Validator\Constraints
  */
 class UniqueEntityProperty extends BaseUniqueEntityConstraint {
 
