@@ -8,7 +8,6 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
  * Class UniqueEntityProperty
  *
  * @Annotation
- * @Target({"PROPERTY"})
  *
  * @package App\Validator\Constraints
  */
