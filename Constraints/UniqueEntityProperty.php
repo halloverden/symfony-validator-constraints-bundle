@@ -5,24 +5,23 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 
 /**
- * Class UniqueEntity
+ * Class UniqueEntityProperty
  *
  * @Annotation
- * @Target({"CLASS", "ANNOTATION"})
  *
  * @package App\Validator\Constraints
  */
-class UniqueEntity extends BaseUniqueEntityConstraint {
+class UniqueEntityProperty extends BaseUniqueEntityConstraint {
 
-  public function getRequiredOptions() {
-    return ['fields'];
+  public function getRequiredOptions(): array {
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getTargets() {
-    return self::CLASS_CONSTRAINT;
+    return self::PROPERTY_CONSTRAINT;
   }
 
 }
