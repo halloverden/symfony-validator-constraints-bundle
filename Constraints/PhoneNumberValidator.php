@@ -26,8 +26,8 @@ class PhoneNumberValidator extends ConstraintValidator {
   /**
    * PhoneNumberValidator constructor.
    *
-   * @param string          $defaultRegion
-   * @param PhoneNumberUtil $phoneNumberUtil
+   * @param string $defaultRegion
+   * @param PhoneNumberUtil|null $phoneNumberUtil
    */
   public function __construct(string $defaultRegion = 'NO', ?PhoneNumberUtil $phoneNumberUtil = null) {
     if (!class_exists(PhoneNumberUtil::class)) {

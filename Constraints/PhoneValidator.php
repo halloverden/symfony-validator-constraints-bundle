@@ -40,16 +40,16 @@ class PhoneValidator extends ConstraintValidator {
       throw new UnexpectedTypeException($constraint, Phone::class);
     }
     $value = (string)$value;
-    $violations = $this->context->getValidator()->validate($value, $this->getConstraints(), self::getGroupSequence());
+    $violations = $this->context->getValidator()->validate($value, $this->getConstraints($constraint->validTypes), self::getGroupSequence());
     if ($violations->count() > 0) {
       self::addViolations($violations);
     }
   }
 
-  private function getConstraints() {
+  private function getConstraints(?array $validTypes) {
     return [
       new NotBlank(['groups' => self::NOT_BLANK_GROUP]),
-      new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'groups' => self::PHONE_NUMBER_GROUP]),
+      new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'groups' => self::PHONE_NUMBER_GROUP, 'validTypes' => $validTypes]),
     ];
   }
 
