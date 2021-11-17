@@ -35,7 +35,6 @@
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/dbal": "^2.0|^3.1.4",
         "giggsey/libphonenumber-for-php": "^8.11",
         "jms/serializer": "^3.4",
         "kickbox/kickbox": "^2.2",
