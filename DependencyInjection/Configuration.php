@@ -12,7 +12,7 @@ class Configuration implements ConfigurationInterface {
   /**
    * @inheritDoc
    */
-  public function getConfigTreeBuilder() {
+  public function getConfigTreeBuilder(): TreeBuilder {
     $treeBuilder = new TreeBuilder('hallo_verden_validator_constraints');
 
     $treeBuilder->getRootNode()
