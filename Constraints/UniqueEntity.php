@@ -21,7 +21,7 @@ class UniqueEntity extends BaseUniqueEntityConstraint {
   /**
    * {@inheritdoc}
    */
-  public function getTargets() {
+  public function getTargets(): array|string {
     return self::CLASS_CONSTRAINT;
   }
 

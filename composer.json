@@ -19,13 +19,13 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.2",
-        "symfony/http-kernel": "^v4.4.13|^v5.1.5",
-        "symfony/dependency-injection": "^v4.4.13|^v5.1.5",
-        "symfony/validator": "^v4.4.13|^v5.1.5",
-        "symfony/framework-bundle": "^v4.4.13|^v5.1.5",
+        "php": ">=8.1",
+        "symfony/http-kernel": "^5.4|^6.1",
+        "symfony/dependency-injection": "^5.4|^6.1",
+        "symfony/validator": "^5.4|^6.1",
+        "symfony/framework-bundle": "^5.4|^6.1",
         "doctrine/annotations": "^1.8",
-        "symfony/property-access": "^v4.4.13|^v5.1.5",
+        "symfony/property-access": "^5.4|^6.1",
         "ext-json": "*"
     },
     "autoload": {

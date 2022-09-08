@@ -45,14 +45,14 @@ class ArrayClass extends Constraint {
   /**
    * @return string|null
    */
-  public function getDefaultOption() {
+  public function getDefaultOption(): ?string {
     return 'classes';
   }
 
   /**
    * @return array
    */
-  public function getRequiredOptions() {
+  public function getRequiredOptions(): array {
     return ['classes'];
   }
 
