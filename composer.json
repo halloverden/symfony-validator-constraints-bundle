@@ -38,6 +38,7 @@
         "giggsey/libphonenumber-for-php": "^8.11",
         "jms/serializer": "^3.4",
         "kickbox/kickbox": "^2.2",
-        "league/uri": "^6.2"
+        "league/uri": "^6.2",
+        "symfony/phpunit-bridge": "^6.1"
     }
 }
