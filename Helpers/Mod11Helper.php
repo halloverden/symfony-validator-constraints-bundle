@@ -8,11 +8,11 @@ final class Mod11Helper {
   /**
    * @param string $input
    * @param array  $weights
-   * @param string $onReminder1 what is returned if reminder is 1
+   * @param string $onRemainder1 what is returned if remainder is 1
    *
    * @return string
    */
-  public static function calculateControlDigitMod11(string $input, array $weights, string $onReminder1 = '-'): string {
+  public static function calculateControlDigitMod11(string $input, array $weights, string $onRemainder1 = '-'): string {
     $length = strlen($input);
     if ($length !== count($weights)) {
       throw new \InvalidArgumentException('a weight needs to be assigned to each digit');
@@ -29,7 +29,7 @@ final class Mod11Helper {
 
     return match ($remainder = $sum % 11) {
       0 => '0',
-      1 => $onReminder1,
+      1 => $onRemainder1,
       default => \strval(11 - $remainder)
     };
   }
