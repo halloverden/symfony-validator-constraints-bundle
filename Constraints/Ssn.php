@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraint;
  * @package App\Validator\Constraints
  *
  * @Annotation
+ * @deprecated use Nin
  */
 class Ssn extends Constraint {
   public $message = 'ssn.invalid';
