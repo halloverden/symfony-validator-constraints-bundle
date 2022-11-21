@@ -6,7 +6,7 @@ use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNin;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNinValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
-class NinValidatorTest extends ConstraintValidatorTestCase {
+class NorwegianNinValidatorTest extends ConstraintValidatorTestCase {
 
   protected function createValidator(): NorwegianNinValidator {
     return new NorwegianNinValidator();
