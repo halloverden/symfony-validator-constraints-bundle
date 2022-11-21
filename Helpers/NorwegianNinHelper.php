@@ -2,7 +2,7 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Helpers;
 
-final class NinHelper {
+final class NorwegianNinHelper {
   private function __construct() {/* static class */}
 
   public const TYPE_D_NUMBER = 'D_NUMBER';

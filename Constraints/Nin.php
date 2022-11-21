@@ -2,7 +2,7 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\NinHelper;
+use HalloVerden\ValidatorConstraintsBundle\Helpers\NorwegianNinHelper;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
@@ -23,7 +23,7 @@ class Nin extends Constraint {
   ];
 
   public string $message = 'This is not a valid nin';
-  public array $types = NinHelper::TYPES;
+  public array $types = NorwegianNinHelper::TYPES;
 
   /**
    * Nin constructor.
@@ -41,7 +41,7 @@ class Nin extends Constraint {
     $this->types = $types ?? $this->types;
 
     foreach ($this->types as $type) {
-      if (!\in_array($type, NinHelper::TYPES, true)) {
+      if (!\in_array($type, NorwegianNinHelper::TYPES, true)) {
         throw new InvalidArgumentException(\sprintf('"%s" is not av valid type', $type));
       }
     }

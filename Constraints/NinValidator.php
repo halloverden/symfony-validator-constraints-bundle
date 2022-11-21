@@ -2,7 +2,7 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\NinHelper;
+use HalloVerden\ValidatorConstraintsBundle\Helpers\NorwegianNinHelper;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -28,7 +28,7 @@ class NinValidator extends ConstraintValidator {
 
     $value = (string) $value;
 
-    if (!NinHelper::isValidNin($value, $constraint->types)) {
+    if (!NorwegianNinHelper::isValidNin($value, $constraint->types)) {
       $this->context
         ->buildViolation($constraint->message)
         ->setInvalidValue($value)
