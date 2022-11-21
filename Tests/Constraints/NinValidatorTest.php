@@ -2,14 +2,14 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Tests\Constraints;
 
-use HalloVerden\ValidatorConstraintsBundle\Constraints\Nin;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\NinValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNin;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNinValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class NinValidatorTest extends ConstraintValidatorTestCase {
 
-  protected function createValidator(): NinValidator {
-    return new NinValidator();
+  protected function createValidator(): NorwegianNinValidator {
+    return new NorwegianNinValidator();
   }
 
   /**
@@ -19,7 +19,7 @@ class NinValidatorTest extends ConstraintValidatorTestCase {
    * @dataProvider validNinsProvider
    */
   public function testValidate_validNins_shouldNotAssertViolations(string $nin): void {
-    $this->validator->validate($nin, new Nin());
+    $this->validator->validate($nin, new NorwegianNin());
     $this->assertNoViolation();
   }
 
@@ -30,10 +30,10 @@ class NinValidatorTest extends ConstraintValidatorTestCase {
    * @dataProvider invalidNinsProvider
    */
   public function testValidate_invalidNins_shouldAssertViolations(string $nin): void {
-    $this->validator->validate($nin, new Nin());
+    $this->validator->validate($nin, new NorwegianNin());
     $this->buildViolation('This is not a valid nin')
       ->setInvalidValue($nin)
-      ->setCode(Nin::ERROR_INVALID_NIN)
+      ->setCode(NorwegianNin::ERROR_INVALID_NIN)
       ->setParameter('{{ value }}', '"' . $nin . '"')
       ->assertRaised();
   }

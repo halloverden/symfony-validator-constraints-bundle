@@ -7,15 +7,11 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
- * Class Nin
- *
- * @package HalloVerden\ValidatorConstraintsBundle\Constraints
- *
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
-class Nin extends Constraint {
+class NorwegianNin extends Constraint {
   public const ERROR_INVALID_NIN = '4c10f6ba-a2ac-4a7d-b597-d27c5a8de008';
 
   protected const ERROR_NAMES = [

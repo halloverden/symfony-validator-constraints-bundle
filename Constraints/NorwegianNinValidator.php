@@ -8,14 +8,14 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-class NinValidator extends ConstraintValidator {
+class NorwegianNinValidator extends ConstraintValidator {
 
   /**
    * @inheritDoc
    */
   public function validate(mixed $value, Constraint $constraint): void {
-    if (!$constraint instanceof Nin) {
-      throw new UnexpectedTypeException($constraint, Nin::class);
+    if (!$constraint instanceof NorwegianNin) {
+      throw new UnexpectedTypeException($constraint, NorwegianNin::class);
     }
 
     if (null === $value || '' === $value) {
@@ -33,7 +33,7 @@ class NinValidator extends ConstraintValidator {
         ->buildViolation($constraint->message)
         ->setInvalidValue($value)
         ->setParameter('{{ value }}', $this->formatValue($value))
-        ->setCode(Nin::ERROR_INVALID_NIN)
+        ->setCode(NorwegianNin::ERROR_INVALID_NIN)
         ->addViolation();
     }
   }
