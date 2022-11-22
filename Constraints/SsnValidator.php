@@ -8,6 +8,9 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
+/**
+ * @deprecated use NinValidator
+ */
 class SsnValidator extends ConstraintValidator {
 
   /**
@@ -17,7 +20,7 @@ class SsnValidator extends ConstraintValidator {
    * @param Constraint $constraint The constraint for the validation
    * @throws \Exception
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof Ssn) {
       throw new UnexpectedTypeException($constraint, Ssn::class);
     }

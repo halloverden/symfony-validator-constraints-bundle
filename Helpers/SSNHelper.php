@@ -4,6 +4,9 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Helpers;
 
 
+/**
+ * @deprecated use NinHelper
+ */
 class SSNHelper {
   /**
    * Returns the personal id part of the ssn
