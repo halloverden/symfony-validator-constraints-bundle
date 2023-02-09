@@ -27,19 +27,7 @@ final class NorwegianNinHelper {
    * @return bool
    */
   public static function isValidNin(string $nin, array $validTypes = self::TYPES): bool {
-    if (!self::is11Digits($nin)) {
-      return false;
-    }
-
-    $day = self::getDay($nin, $validTypes);
-    $month = self::getMonth($nin, $validTypes);
-    $year = self::getYear($nin);
-
-    if (false === $year) {
-      return false;
-    }
-
-    if (!checkdate($month, $day, $year)) {
+    if (null === self::getBirthDate($nin, $validTypes)) {
       return false;
     }
 
@@ -64,7 +52,7 @@ final class NorwegianNinHelper {
    * @return \DateTimeInterface|null
    */
   public static function getBirthDate(string $nin, array $validTypes = self::TYPES): ?\DateTimeInterface {
-    if (!self::is11Digits($nin)) {
+    if (!\preg_match('/^[0-9]{11}$/', $nin)) {
       return null;
     }
 
@@ -76,8 +64,12 @@ final class NorwegianNinHelper {
       return null;
     }
 
+    if (!checkdate($month, $day, $year)) {
+      return null;
+    }
+
     try {
-      return new \DateTime(\sprintf('%d-%02d-%02d', $year, $month, $day));
+      return \DateTime::createFromFormat('Y-m-d', \sprintf('%d-%02d-%02d', $year, $month, $day));
     } catch (\Exception) {
       return null;
     }
@@ -141,15 +133,6 @@ final class NorwegianNinHelper {
     }
 
     return false;
-  }
-
-  /**
-   * @param string $nin
-   *
-   * @return bool
-   */
-  private static function is11Digits(string $nin): bool {
-    return (bool) \preg_match('/^[0-9]{11}$/', $nin);
   }
 
 }
