@@ -69,7 +69,7 @@ final class NorwegianNinHelper {
     }
 
     try {
-      return \DateTime::createFromFormat('Y-m-d', \sprintf('%d-%02d-%02d', $year, $month, $day));
+      return \DateTime::createFromFormat('!Y-m-d', \sprintf('%d-%02d-%02d', $year, $month, $day));
     } catch (\Exception) {
       return null;
     }
