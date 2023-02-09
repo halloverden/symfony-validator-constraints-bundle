@@ -27,25 +27,12 @@ final class NorwegianNinHelper {
    * @return bool
    */
   public static function isValidNin(string $nin, array $validTypes = self::TYPES): bool {
-    if (!\preg_match('/^[0-9]{11}$/', $nin)) {
+    if (null === self::getBirthDate($nin, $validTypes)) {
       return false;
     }
 
-    $day = \substr($nin, 0, 2);
-    $month = \substr($nin, 2, 2);
-    $year = \substr($nin, 4, 2);
-    $ind = \substr($nin, 6, 3);
     $k1 = \substr($nin, 9, 1);
     $k2 = \substr($nin, 10, 1);
-
-    $fullYear = self::getFullYear((int) $ind, (int) $year);
-    if (false === $fullYear) {
-      return false;
-    }
-
-    if (!self::isValidDate((int) $day, (int) $month, $fullYear, $validTypes)) {
-      return false;
-    }
 
     if (Mod11Helper::calculateControlDigitMod11(\substr($nin, 0, 9), self::K1_WEIGHTS) !== $k1) {
       return false;
@@ -59,12 +46,76 @@ final class NorwegianNinHelper {
   }
 
   /**
-   * @param int $ind
-   * @param int $year
+   * @param string $nin
+   * @param array  $validTypes
+   *
+   * @return \DateTimeInterface|null
+   */
+  public static function getBirthDate(string $nin, array $validTypes = self::TYPES): ?\DateTimeInterface {
+    if (!\preg_match('/^[0-9]{11}$/', $nin)) {
+      return null;
+    }
+
+    $day = self::getDay($nin, $validTypes);
+    $month = self::getMonth($nin, $validTypes);
+    $year = self::getYear($nin);
+
+    if (false === $year) {
+      return null;
+    }
+
+    if (!checkdate($month, $day, $year)) {
+      return null;
+    }
+
+    try {
+      return \DateTime::createFromFormat('!Y-m-d', \sprintf('%d-%02d-%02d', $year, $month, $day));
+    } catch (\Exception) {
+      return null;
+    }
+  }
+
+  /**
+   * @param string   $nin
+   * @param string[] $validTypes
+   *
+   * @return int
+   */
+  private static function getDay(string $nin, array $validTypes): int {
+    $day = (int) \substr($nin, 0, 2);
+
+    if ($day > 40 && \in_array(self::TYPE_D_NUMBER, $validTypes, true)) {
+      return $day - 40;
+    }
+
+    return $day;
+  }
+
+  /**
+   * @param string   $nin
+   * @param string[] $validTypes
+   *
+   * @return int
+   */
+  private static function getMonth(string $nin, array $validTypes): int {
+    $month = (int) \substr($nin, 2, 2);
+
+    if ($month > 80 && \in_array(self::TYPE_NPR_SYNTHETIC, $validTypes, true)) {
+      return $month - 80;
+    }
+
+    return $month;
+  }
+
+  /**
+   * @param string $nin
    *
    * @return int|false
    */
-  private static function getFullYear(int $ind, int $year): int|false {
+  private static function getYear(string $nin): int|false {
+    $year = (int) \substr($nin, 4, 2);
+    $ind = (int) \substr($nin, 6, 3);
+
     if ($ind >= 0 && $ind <= 499) {
       return 1900 + $year;
     }
@@ -82,26 +133,6 @@ final class NorwegianNinHelper {
     }
 
     return false;
-  }
-
-  /**
-   * @param int   $day
-   * @param int   $month
-   * @param int   $year
-   * @param array $validTypes
-   *
-   * @return bool
-   */
-  private static function isValidDate(int $day, int $month, int $year, array $validTypes): bool {
-    if ($day > 40 && \in_array(self::TYPE_D_NUMBER, $validTypes, true)) {
-      $day -= 40;
-    }
-
-    if ($month > 80 && \in_array(self::TYPE_NPR_SYNTHETIC, $validTypes, true)) {
-      $month -= 80;
-    }
-
-    return checkdate($month, $day, $year);
   }
 
 }
