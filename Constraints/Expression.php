@@ -11,7 +11,7 @@ class Expression extends SymfonyExpression {
   /**
    * @inheritDoc
    */
-  public function validatedBy() {
+  public function validatedBy(): string {
     return ExpressionValidator::class;
   }
 

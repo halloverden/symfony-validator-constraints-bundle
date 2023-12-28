@@ -18,7 +18,7 @@ class ExpressionValidator extends SymfonyExpressionValidator {
   /**
    * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate($value, Constraint $constraint): void {
     if (!$constraint instanceof Expression) {
       throw new UnexpectedTypeException($constraint, Expression::class);
     }

@@ -22,7 +22,7 @@ abstract class BaseUniqueEntityConstraint extends Constraint implements ArrayCla
     self::NOT_UNIQUE_ERROR => 'NOT_UNIQUE_ERROR',
   ];
 
-  public function getDefaultOption() {
+  public function getDefaultOption(): ?string {
     return 'fields';
   }
 

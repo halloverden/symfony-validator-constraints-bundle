@@ -14,7 +14,7 @@ namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
  */
 class UniqueEntity extends BaseUniqueEntityConstraint {
 
-  public function getRequiredOptions() {
+  public function getRequiredOptions(): array {
     return ['fields'];
   }
 

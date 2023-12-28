@@ -34,7 +34,7 @@ class IdenticalToValidator extends SymfonyIdenticalToValidator {
   /**
    * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate($value, Constraint $constraint): void {
     if (!$constraint instanceof AbstractComparison) {
       throw new UnexpectedTypeException($constraint, AbstractComparison::class);
     }

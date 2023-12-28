@@ -17,7 +17,7 @@ class PropertyClass extends Constraint {
   public $classes = [];
   public $groupsToGet;
 
-  public function getRequiredOptions() {
+  public function getRequiredOptions(): array {
     return ['propertyPath', 'classes'];
   }
 }

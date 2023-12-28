@@ -29,7 +29,7 @@ class CustomCollection extends Composite {
     parent::__construct($options);
   }
 
-  protected function initializeNestedConstraints() {
+  protected function initializeNestedConstraints(): void {
     parent::initializeNestedConstraints();
 
     if (!\is_array($this->fields)) {
@@ -46,14 +46,14 @@ class CustomCollection extends Composite {
    *
    * @return string The property name
    */
-  protected function getCompositeOption() {
+  protected function getCompositeOption(): string {
     return 'fields';
   }
 
   /**
    * @return array
    */
-  public function getRequiredOptions() {
+  public function getRequiredOptions(): array {
     return ['fields'];
   }
 }
