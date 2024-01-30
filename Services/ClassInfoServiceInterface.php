@@ -33,14 +33,14 @@ interface ClassInfoServiceInterface {
    *
    * @return array
    */
-  public function getClassPropertiesAnnotations(string $class): array;
+  public function getClassPropertiesAttributes(string $class): array;
 
   /**
    * @param string $class
    *
    * @return array
    */
-  public function getClassAnnotations(string $class): array;
+  public function getClassAttributes(string $class): array;
 
   /**
    * @param string        $class
@@ -49,14 +49,14 @@ interface ClassInfoServiceInterface {
    *
    * @return array|null
    */
-  public function getClassPropertyAnnotations(string $class, string $property, \Closure $filter = null): ?array;
+  public function getClassPropertyAttributes(string $class, string $property, \Closure $filter = null): ?array;
 
   /**
    * @param string $class
    * @param string $property
-   * @param string $annotation
+   * @param string $attribute
    *
-   * @return mixed
+   * @return \ReflectionAttribute|null
    */
-  public function getClassPropertyAnnotation(string $class, string $property, string $annotation);
+  public function getClassPropertyAttribute(string $class, string $property, string $attribute): \ReflectionAttribute|null;
 }

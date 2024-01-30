@@ -39,10 +39,11 @@ abstract class BaseConstraintValidator extends ConstraintValidator {
    * @return array
    */
   protected function getClassConstraintsForClass($class, array $groups): array {
-    $annotations = $this->classInfoService->getClassAnnotations($class);
+    $annotations = $this->classInfoService->getClassAttributes($class);
 
-    return array_filter($annotations, function ($annotation) use ($groups) {
-      return $annotation instanceof Constraint && array_intersect($groups, $annotation->groups ?: []);
+    return array_filter($annotations, function (\ReflectionAttribute $attribute) use ($groups) {
+      $instance = $attribute->newInstance();
+      return $instance instanceof Constraint && array_intersect($groups, $instance->groups ?: []);
     });
   }
 
@@ -54,18 +55,22 @@ abstract class BaseConstraintValidator extends ConstraintValidator {
    */
   protected final function getPropertyConstraintsForClass($class, array $groups): array {
     $constraints = [];
-    foreach ($this->classInfoService->getClassPropertiesAnnotations($class) as $property => $annotations) {
+    foreach ($this->classInfoService->getClassPropertiesAttributes($class) as $property => $attributes) {
 
       if (class_exists(SerializedName::class)) {
-        $serializedName = $this->classInfoService->getClassPropertyAnnotation($class, $property, SerializedName::class);
+        $serializedName = $this->classInfoService->getClassPropertyAttribute($class, $property, SerializedName::class);
 
-        if ($serializedName && $serializedName instanceof SerializedName) {
-          $property = $serializedName->name;
+        if ($serializedName) {
+          $instance = $serializedName->newInstance();
+
+          if ($instance instanceof SerializedName) {
+            $property = $instance->name;
+          }
         }
       }
 
-      $constraints[$property] = array_filter($annotations, function ($annotation) use ($groups) {
-        return $annotation instanceof Constraint && array_intersect($groups, $annotation->groups ?: []);
+      $constraints[$property] = array_filter($attributes, function ($attribute) use ($groups) {
+        return $attribute instanceof Constraint && array_intersect($groups, $attribute->groups ?: []);
       });
     }
 
