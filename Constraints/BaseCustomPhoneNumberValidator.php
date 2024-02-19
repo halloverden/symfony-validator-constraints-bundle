@@ -4,21 +4,16 @@
 namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
 
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\GroupSequence;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
- * Class PhoneValidator
+ * Class BaseCustomPhoneNumberValidator
  * @package HalloVerden\ValidatorConstraintsBundle\Constraints
- * @deprecated
  */
-class PhoneValidator extends ConstraintValidator {
-  const NOT_BLANK_GROUP = 'not_blank';
-  const PHONE_NUMBER_GROUP = 'phone_number';
+abstract class BaseCustomPhoneNumberValidator extends ConstraintValidator {
 
   /**
    * @var string
@@ -34,17 +29,16 @@ class PhoneValidator extends ConstraintValidator {
     $this->defaultRegion = $defaultRegion;
   }
 
-
   /**
    * @param mixed $value
    * @param Constraint $constraint
    */
   public function validate($value, Constraint $constraint) {
-    if (!$constraint instanceof Phone) {
-      throw new UnexpectedTypeException($constraint, Phone::class);
+    if (!$constraint instanceof BaseCustomPhoneNumber) {
+      throw new UnexpectedTypeException($constraint, BaseCustomPhoneNumber::class);
     }
     $value = (string)$value;
-    $violations = $this->context->getValidator()->validate($value, $this->getConstraints($constraint->validTypes), self::getGroupSequence());
+    $violations = $this->context->getValidator()->validate($value, $this->getConstraints($constraint->getValidTypes()));
     if ($violations->count() > 0) {
       self::addViolations($violations);
     }
@@ -52,13 +46,8 @@ class PhoneValidator extends ConstraintValidator {
 
   private function getConstraints(?array $validTypes) {
     return [
-      new NotBlank(['groups' => self::NOT_BLANK_GROUP]),
-      new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'groups' => self::PHONE_NUMBER_GROUP, 'validTypes' => $validTypes]),
+      new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'validTypes' => $validTypes]),
     ];
-  }
-
-  private static function getGroupSequence() {
-    return new GroupSequence([self::NOT_BLANK_GROUP, self::PHONE_NUMBER_GROUP]);
   }
 
   private function addViolations(ConstraintViolationListInterface $violations) {

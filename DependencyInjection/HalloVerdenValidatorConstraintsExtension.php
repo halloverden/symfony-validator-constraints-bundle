@@ -10,8 +10,10 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\ManagerRegistry;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\ArrayClassValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\AssertIfValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\FixedLineOrMobilePhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\IdenticalToValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraints\LooselyDefinedMobilePhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PropertyClassValidator;
@@ -95,6 +97,12 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
         '$defaultRegion' => $config['phone']['default_region']
       ]);
       $this->registerValidator($container, PhoneNumberValidator::class, [
+        '$defaultRegion' => $config['phone']['default_region']
+      ]);
+      $this->registerValidator($container, LooselyDefinedMobilePhoneNumberValidator::class, [
+        '$defaultRegion' => $config['phone']['default_region']
+      ]);
+      $this->registerValidator($container, FixedLineOrMobilePhoneNumberValidator::class, [
         '$defaultRegion' => $config['phone']['default_region']
       ]);
     }
