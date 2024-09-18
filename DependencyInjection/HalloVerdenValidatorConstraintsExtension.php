@@ -8,14 +8,11 @@ use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Persistence\ManagerRegistry;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\ArrayClassValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\AssertIfValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\IdenticalToValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\KickboxValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneNumberValidator;
 use HalloVerden\ValidatorConstraintsBundle\Constraints\PhoneValidator;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\PropertyClassValidator;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\UniqueEntityValidator;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoService;
 use HalloVerden\ValidatorConstraintsBundle\Services\ClassInfoServiceInterface;
 use Psr\Log\LoggerInterface;
@@ -51,7 +48,6 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
       $classInfoService->setClass(ClassInfoService::class);
       $container->setDefinition(ClassInfoServiceInterface::class, $classInfoService);
 
-      $propertyAccessor = null;
       if (class_exists(PropertyAccessor::class)) {
         if (isset($bundles['FrameworkBundle'])) {
           $propertyAccessor = new Reference(PropertyAccessorInterface::class);
@@ -59,24 +55,11 @@ class HalloVerdenValidatorConstraintsExtension extends Extension {
           $propertyAccessor = new PropertyAccessor();
         }
 
-        $arguments = [
-          '$classInfoService' => new Reference(ClassInfoServiceInterface::class),
-          '$propertyAccessor' => $propertyAccessor
-        ];
-        $this->registerValidator($container, ArrayClassValidator::class, $arguments);
-        $this->registerValidator($container, PropertyClassValidator::class, $arguments);
-
         $this->registerValidator($container, IdenticalToValidator::class, [
           '$propertyAccessor' => $propertyAccessor
         ]);
       }
 
-      if (isset($bundles['DoctrineBundle']) && interface_exists(ManagerRegistry::class)) {
-        $this->registerValidator($container, UniqueEntityValidator::class, [
-          '$registry' => new Reference(ManagerRegistry::class),
-          '$propertyAccessor' => $propertyAccessor
-        ]);
-      }
     }
 
     $this->registerValidator($container, AssertIfValidator::class, [
