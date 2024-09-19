@@ -7,7 +7,7 @@
 
     <testsuites>
         <testsuite name="HalloVerdenValidatorConstraintsBundle test suite">
-            <directory>./Tests</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
 

@@ -19,26 +19,25 @@
     "sort-packages": true
   },
   "require": {
-    "doctrine/annotations": "^1.8",
     "ext-json": "*",
-    "php": ">=8.1",
-    "symfony/dependency-injection": "^5.4|^6.4|^7.0",
-    "symfony/framework-bundle": "^5.4|^6.4|^7.0",
-    "symfony/http-kernel": "^5.4|^6.4|^7.0",
-    "symfony/property-access": "^5.4|^6.4|^7.0",
-    "symfony/validator": "^5.4|^6.4|^7.0"
+    "php": ">=8.2",
+    "symfony/framework-bundle": "^6.4|^7.1",
+    "symfony/property-access": "^6.4|^7.1",
+    "symfony/validator": "^6.4|^7.1",
+    "giggsey/libphonenumber-for-php": "^8.11",
+    "league/uri": "^7.4"
   },
   "autoload": {
     "psr-4": {
-      "HalloVerden\\ValidatorConstraintsBundle\\": ""
+      "HalloVerden\\ValidatorConstraintsBundle\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HalloVerden\\ValidatorConstraintsBundle\\Tests\\": "tests"
     }
   },
   "require-dev": {
-    "doctrine/doctrine-bundle": "^2.0",
-    "giggsey/libphonenumber-for-php": "^8.11",
-    "jms/serializer": "^3.4",
-    "kickbox/kickbox": "^2.2",
-    "league/uri": "^6.2",
-    "symfony/phpunit-bridge": "^6.1"
+    "symfony/phpunit-bridge": "^6.4|^7.1"
   }
 }
