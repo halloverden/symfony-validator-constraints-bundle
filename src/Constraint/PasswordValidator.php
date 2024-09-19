@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use Symfony\Component\Validator\Constraint;
@@ -19,30 +19,17 @@ class PasswordValidator extends ConstraintValidator {
   private const GROUP_NOT_COMPROMISED = 'GROUP_NOT_COMPROMISED';
 
   /**
-   * @var int
-   */
-  private $defaultMinLength;
-
-  /**
-   * @var bool
-   */
-  private $defaultCheckDataBreach;
-
-  /**
    * PasswordValidator constructor.
-   *
-   * @param int  $defaultMinLength
-   * @param bool $defaultCheckDataBreach
    */
-  public function __construct(int $defaultMinLength = 12, bool $defaultCheckDataBreach = true) {
-    $this->defaultMinLength = $defaultMinLength;
-    $this->defaultCheckDataBreach = $defaultCheckDataBreach;
+  public function __construct(
+    private readonly int $defaultMinLength = 12,
+    private readonly bool $defaultCheckDataBreach = true) {
   }
 
   /**
    * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof Password) {
       throw new UnexpectedTypeException($constraint, Password::class);
     }

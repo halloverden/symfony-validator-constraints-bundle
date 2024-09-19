@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\GroupSequence;
@@ -17,25 +17,17 @@ class PhoneValidator extends ConstraintValidator {
   const PHONE_NUMBER_GROUP = 'phone_number';
 
   /**
-   * @var string
-   */
-  private $defaultRegion;
-
-  /**
    * PhoneValidator constructor.
-   *
-   * @param string $defaultRegion
    */
-  public function __construct(string $defaultRegion = 'NO') {
-    $this->defaultRegion = $defaultRegion;
+  public function __construct(
+    private readonly string $defaultRegion = 'NO'
+  ) {
   }
 
-
   /**
-   * @param mixed $value
-   * @param Constraint $constraint
+   * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof Phone) {
       throw new UnexpectedTypeException($constraint, Phone::class);
     }
@@ -46,18 +38,18 @@ class PhoneValidator extends ConstraintValidator {
     }
   }
 
-  private function getConstraints(?array $validTypes) {
+  private function getConstraints(?array $validTypes): array {
     return [
       new NotBlank(['groups' => self::NOT_BLANK_GROUP]),
       new PhoneNumber(['defaultRegion' => $this->defaultRegion, 'groups' => self::PHONE_NUMBER_GROUP, 'validTypes' => $validTypes]),
     ];
   }
 
-  private static function getGroupSequence() {
+  private static function getGroupSequence(): GroupSequence {
     return new GroupSequence([self::NOT_BLANK_GROUP, self::PHONE_NUMBER_GROUP]);
   }
 
-  private function addViolations(ConstraintViolationListInterface $violations) {
+  private function addViolations(ConstraintViolationListInterface $violations): void {
     /** @var ConstraintViolation $violation */
     foreach ($violations as $violation){
       $this->context->setConstraint($violation->getConstraint());

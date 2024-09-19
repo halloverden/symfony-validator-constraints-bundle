@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
@@ -14,11 +14,7 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class IdenticalToValidator extends SymfonyIdenticalToValidator {
-
-  /**
-   * @var PropertyAccessorInterface|null
-   */
-  private $propertyAccessor;
+  private ?PropertyAccessorInterface $propertyAccessor;
 
   /**
    * IdenticalToValidator constructor.
@@ -34,7 +30,7 @@ class IdenticalToValidator extends SymfonyIdenticalToValidator {
   /**
    * @inheritDoc
    */
-  public function validate($value, Constraint $constraint): void {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof AbstractComparison) {
       throw new UnexpectedTypeException($constraint, AbstractComparison::class);
     }

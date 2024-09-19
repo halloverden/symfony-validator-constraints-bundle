@@ -1,8 +1,7 @@
 <?php
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
-use Doctrine\Common\Annotations\Annotation\Target;
 use Symfony\Component\Validator\Constraint;
 
 /**

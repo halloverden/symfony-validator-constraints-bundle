@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use Symfony\Component\Validator\Constraint;
@@ -12,17 +12,11 @@ use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorTrait;
 
-class AssertIfValidator extends ConstraintValidator {
-
-  /**
-   * @var TranslatorInterface
-   */
-  private $translator;
+final class AssertIfValidator extends ConstraintValidator {
+  private TranslatorInterface $translator;
 
   /**
    * AssertIfValidator constructor.
-   *
-   * @param TranslatorInterface $translator
    */
   public function __construct(?TranslatorInterface $translator = null) {
     if (null === $translator) {
@@ -37,16 +31,11 @@ class AssertIfValidator extends ConstraintValidator {
 
 
   /**
-   * @param mixed $value
-   * @param Constraint $constraint
+   * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof AssertIf) {
       throw new UnexpectedTypeException($constraint, AssertIf::class);
-    }
-
-    if (!$constraint->test instanceof Constraint) {
-      throw new UnexpectedTypeException($constraint->test, Constraint::class);
     }
 
     $context = $this->context;

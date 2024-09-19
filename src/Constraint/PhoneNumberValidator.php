@@ -1,9 +1,9 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\PhoneNumberHelper;
+use HalloVerden\ValidatorConstraintsBundle\Helper\PhoneNumberHelper;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\Validator\Constraint;
@@ -12,44 +12,26 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class PhoneNumberValidator extends ConstraintValidator {
-
-  /**
-   * @var PhoneNumberUtil
-   */
-  private $phoneNumberUtil;
-
-  /**
-   * @var string
-   */
-  private $defaultRegion;
+  private readonly PhoneNumberUtil $phoneNumberUtil;
 
   /**
    * PhoneNumberValidator constructor.
-   *
-   * @param string $defaultRegion
-   * @param PhoneNumberUtil|null $phoneNumberUtil
    */
-  public function __construct(string $defaultRegion = 'NO', ?PhoneNumberUtil $phoneNumberUtil = null) {
+  public function __construct(
+    private readonly string $defaultRegion = 'NO',
+    ?PhoneNumberUtil $phoneNumberUtil = null
+  ) {
     if (!class_exists(PhoneNumberUtil::class)) {
       throw new \LogicException(sprintf('The "%s" class requires the "libphonenumber" component. Try running "composer require giggsey/libphonenumber-for-php".', self::class));
     }
 
-    if (!$phoneNumberUtil) {
-      $phoneNumberUtil = PhoneNumberUtil::getInstance();
-    }
-
-    $this->phoneNumberUtil = $phoneNumberUtil;
-    $this->defaultRegion = $defaultRegion;
+    $this->phoneNumberUtil = $phoneNumberUtil ?? PhoneNumberUtil::getInstance();
   }
 
-
   /**
-   * Checks if the passed value is valid and builds violations in case it's not.
-   *
-   * @param mixed      $value The value that should be validated
-   * @param Constraint $constraint The constraint for the validation
+   * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof PhoneNumber) {
       throw new UnexpectedTypeException($constraint, PhoneNumber::class);
     }
@@ -73,12 +55,12 @@ class PhoneNumberValidator extends ConstraintValidator {
   /**
    * Checks if the phone number provided is valid by checking its formal validity according to region first, and then by checking if its type is allowed.
    *
-   * @param string|\libphonenumber\PhoneNumber $value
+   * @param \libphonenumber\PhoneNumber|string $value
    * @param PhoneNumber                        $constraint
    *
    * @return bool
    */
-  private function isValidPhoneNumber($value, PhoneNumber $constraint): bool {
+  private function isValidPhoneNumber(\libphonenumber\PhoneNumber|string $value, PhoneNumber $constraint): bool {
     if (!$value instanceof \libphonenumber\PhoneNumber) {
       try {
         $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion ?: $this->defaultRegion);
@@ -94,11 +76,12 @@ class PhoneNumberValidator extends ConstraintValidator {
   /**
    * Checks if the number provided has an allowed type.
    *
-   * @param string|\libphonenumber\PhoneNumber $value
+   * @param \libphonenumber\PhoneNumber|string $value
    * @param PhoneNumber                        $constraint
+   *
    * @return bool
    */
-  private function isPhoneNumberTypeAllowed($value, PhoneNumber $constraint): bool {
+  private function isPhoneNumberTypeAllowed(\libphonenumber\PhoneNumber|string $value, PhoneNumber $constraint): bool {
     if(!empty($constraint->validTypes)) {
       if (!$value instanceof \libphonenumber\PhoneNumber) {
         try {
@@ -122,7 +105,7 @@ class PhoneNumberValidator extends ConstraintValidator {
    *
    * @return string
    */
-  private function getInvalidityReason(string $value, PhoneNumber $constraint) {
+  private function getInvalidityReason(string $value, PhoneNumber $constraint): string {
     try {
       $phoneNumber = PhoneNumberHelper::getPhoneNumber((string) $value, true, $constraint->defaultRegion ?: $this->defaultRegion);
     } catch (NumberParseException $e) {

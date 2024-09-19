@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use Symfony\Component\Validator\Constraint;
@@ -13,12 +13,9 @@ class NorwegianBankAccountValidator extends ConstraintValidator {
   const SIMPLE_BANK_ACCOUNT_REGEX = '/^[0-9]{11}$/';
 
   /**
-   * Checks if the passed value is valid.
-   *
-   * @param mixed $value The value that should be validated
-   * @param Constraint $constraint The constraint for the validation
+   * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof NorwegianBankAccount) {
       throw new UnexpectedTypeException($constraint, NorwegianBankAccount::class);
     }

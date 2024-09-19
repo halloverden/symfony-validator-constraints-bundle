@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use League\Uri\Exceptions\SyntaxError;
@@ -23,12 +23,9 @@ class UriValidator extends ConstraintValidator {
   }
 
   /**
-   * Checks if the passed value is valid.
-   *
-   * @param mixed      $value The value that should be validated
-   * @param Constraint $constraint The constraint for the validation
+   * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof Uri) {
       throw new UnexpectedTypeException($constraint, Uri::class);
     }
@@ -44,8 +41,8 @@ class UriValidator extends ConstraintValidator {
     $value = (string) $value;
 
     try {
-      $uri = LeagueUri::createFromString($value);
-    } catch (SyntaxError $exception) {
+      $uri = LeagueUri::new($value);
+    } catch (SyntaxError) {
       $this->context->buildViolation($constraint->message)
         ->setParameter('{{ value }}', $this->formatValue($value))
         ->setCode(Uri::ERROR_INVALID_URI)
@@ -61,4 +58,5 @@ class UriValidator extends ConstraintValidator {
         ->addViolation();
     }
   }
+
 }

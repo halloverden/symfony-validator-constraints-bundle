@@ -1,19 +1,17 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use libphonenumber\PhoneNumberType;
 use Symfony\Component\Validator\Constraint;
 
 /**
- * Class PhoneNumber
- *
- * @package App\Validator\Constraints
- *
  * @Annotation
+ * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class PhoneNumber extends Constraint {
   const INVALID_PHONE_NUMBER = '71cb361e-3d33-4565-abd6-20d63ba987e8';
   const IS_POSSIBLE = '60f100fb-376a-47f4-88b8-a9d3a4f2507f';
@@ -24,7 +22,7 @@ class PhoneNumber extends Constraint {
   const INVALID_LENGTH = '6bab7c70-f903-4fd1-8542-8fe18c301221';
   const INVALID_TYPE = 'fc1c7a49-ee84-4b45-a41d-4d3ee89d63bb';
 
-  protected static $errorNames = [
+  protected const ERROR_NAMES = [
     self::INVALID_PHONE_NUMBER => 'INVALID_PHONE_NUMBER',
     self::IS_POSSIBLE => 'IS_POSSIBLE',
     self::INVALID_COUNTRY_CODE => 'INVALID_COUNTRY_CODE',
@@ -55,46 +53,34 @@ class PhoneNumber extends Constraint {
     5 => 'invalid_length'
   ];
 
-  /**
-   * @var string
-   */
-  public $message = 'phoneNumber.%s';
+  public string $message = 'phoneNumber.%s';
+  public ?string $defaultRegion = null;
 
   /**
-   * @var string
-   */
-  public $defaultRegion;
-
-  /**
-   * @see \libphonenumber\PhoneNumberType
-   *
    * @var int[]
    */
-  public $validTypes = [];
+  public array $validTypes = [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
 
-  public function __construct($options = null) {
+  /**
+   * PhoneNumber constructor.
+   */
+  public function __construct(
+    ?array $options = null,
+    ?string $message = null,
+    ?string $defaultRegion = null,
+    ?array $validTypes = null,
+    ?array $groups = null,
+    mixed $payload = null
+  ) {
     if (!class_exists(PhoneNumberType::class)) {
       throw new \LogicException(sprintf('The "%s" class requires the "libphonenumber" component. Try running "composer require giggsey/libphonenumber-for-php".', self::class));
     }
 
-    $options['validTypes'] = $this->validTypes = $options['validTypes'] ?? [PhoneNumberType::MOBILE, PhoneNumberType::FIXED_LINE_OR_MOBILE];
+    parent::__construct($options, $groups, $payload);
 
-    parent::__construct($options);
-  }
-
-
-  /**
-   * @return string|null
-   */
-  public function getDefaultOption(): ?string {
-    return 'defaultRegion';
-  }
-
-  /**
-   * @return array
-   */
-  public function getRequiredOptions(): array {
-    return ['defaultRegion'];
+    $this->message = $message ?? $this->message;
+    $this->defaultRegion = $defaultRegion ?? $this->defaultRegion;
+    $this->validTypes = $validTypes ?? $this->validTypes;
   }
 
 }

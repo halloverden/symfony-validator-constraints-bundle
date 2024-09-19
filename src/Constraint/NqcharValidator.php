@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
 
 use Symfony\Component\Validator\Constraint;
@@ -9,11 +9,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-/**
- * Class NqcharValidator
- *
- * @package App\Validator\Constraints
- */
+
 class NqcharValidator extends ConstraintValidator {
   /** @see https://tools.ietf.org/html/rfc6749#appendix-A */
   const PATTERN = '/^[\x21\x23-\x5B\x5D-\x7E]*$/';
@@ -21,7 +17,7 @@ class NqcharValidator extends ConstraintValidator {
   /**
    * @inheritDoc
    */
-  public function validate($value, Constraint $constraint) {
+  public function validate(mixed $value, Constraint $constraint): void {
     if (!$constraint instanceof Nqchar) {
       throw new UnexpectedTypeException($constraint, Nqchar::class);
     }

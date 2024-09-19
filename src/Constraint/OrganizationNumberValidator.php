@@ -1,8 +1,8 @@
 <?php
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\Mod11Helper;
+use HalloVerden\ValidatorConstraintsBundle\Helper\Mod11Helper;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

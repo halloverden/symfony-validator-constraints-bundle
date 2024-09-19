@@ -1,8 +1,8 @@
 <?php
 
-namespace HalloVerden\ValidatorConstraintsBundle\Constraints;
+namespace HalloVerden\ValidatorConstraintsBundle\Constraint;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\NorwegianNinHelper;
+use HalloVerden\ValidatorConstraintsBundle\Helper\NorwegianNinHelper;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
