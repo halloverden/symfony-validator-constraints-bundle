@@ -1,6 +1,6 @@
 <?php
 
-namespace HalloVerden\ValidatorConstraintsBundle\Helpers;
+namespace HalloVerden\ValidatorConstraintsBundle\Helper;
 
 final class NorwegianNinHelper {
   private function __construct() {/* static class */}

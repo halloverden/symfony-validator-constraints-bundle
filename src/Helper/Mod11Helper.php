@@ -1,6 +1,6 @@
 <?php
 
-namespace HalloVerden\ValidatorConstraintsBundle\Helpers;
+namespace HalloVerden\ValidatorConstraintsBundle\Helper;
 
 final class Mod11Helper {
   private function __construct() {/* static class */}

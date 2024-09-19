@@ -1,15 +1,14 @@
 <?php
 
 
-namespace HalloVerden\ValidatorConstraintsBundle\Helpers;
+namespace HalloVerden\ValidatorConstraintsBundle\Helper;
 
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberUtil;
 
-class PhoneNumberHelper {
-
-  private static $phoneNumbers = [];
+final class PhoneNumberHelper {
+  private static array $phoneNumbers = [];
 
   /**
    * @param string $number
