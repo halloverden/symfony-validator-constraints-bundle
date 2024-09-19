@@ -2,7 +2,7 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Tests\Helpers;
 
-use HalloVerden\ValidatorConstraintsBundle\Helpers\NorwegianNinHelper;
+use HalloVerden\ValidatorConstraintsBundle\Helper\NorwegianNinHelper;
 use PHPUnit\Framework\TestCase;
 
 class NorwegianNinHelperTest extends TestCase {

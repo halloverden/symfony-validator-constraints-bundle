@@ -2,8 +2,8 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Tests\Constraints;
 
-use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNin;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\NorwegianNinValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraint\NorwegianNin;
+use HalloVerden\ValidatorConstraintsBundle\Constraint\NorwegianNinValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class NorwegianNinValidatorTest extends ConstraintValidatorTestCase {

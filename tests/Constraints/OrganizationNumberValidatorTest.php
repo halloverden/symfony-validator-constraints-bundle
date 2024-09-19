@@ -2,8 +2,8 @@
 
 namespace HalloVerden\ValidatorConstraintsBundle\Tests\Constraints;
 
-use HalloVerden\ValidatorConstraintsBundle\Constraints\OrganizationNumber;
-use HalloVerden\ValidatorConstraintsBundle\Constraints\OrganizationNumberValidator;
+use HalloVerden\ValidatorConstraintsBundle\Constraint\OrganizationNumber;
+use HalloVerden\ValidatorConstraintsBundle\Constraint\OrganizationNumberValidator;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 class OrganizationNumberValidatorTest extends ConstraintValidatorTestCase {
