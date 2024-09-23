@@ -1,0 +1,3 @@
+hallo_verden_validator_constraints:
+  phone:
+    default_region: 'NO'
